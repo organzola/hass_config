@@ -1,0 +1,89 @@
+- alias: Action - Turn off lights at 23:00
+  trigger:
+    platform: time
+    hours: 23
+    minutes: 00
+    seconds: 0
+  action:
+    service: homeassistant.turn_off
+    entity_id: 
+      - group.living_room
+      - group.conservatory
+
+- alias: Action - Landing light stay on 
+  trigger:
+    platform: time
+    hours: 22
+    minutes: 00
+    seconds: 0
+  action:
+    service: homeassistant.turn_on
+    entity_id: 
+      - group.landing
+    data:
+     brightness: 55
+    
+- alias: Sunset_lights
+  trigger:
+    platform: sun
+    event: sunset
+    offset: "-00:45:00"
+  action:
+    service: homeassistant.turn_on
+    entity_id: 
+      - group.living_room
+      - group.conservatory
+    data:
+     brightness: 65
+
+- alias: Notify - Lights have turned on
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:45:00'
+  action:
+    service: notify.Home_Assistant_Telegram
+    data:
+      message: 'The sun is setting in 45 mins - living and conservatory lights are on.'
+
+- alias: Send message at a given time
+  trigger:
+    platform: time
+    hours: 23
+    minutes: 00
+    seconds: 0
+  action:
+    service: notify.Home_Assistant_Telegram
+    data:
+      message: 'Time for bed you two!'
+
+- alias: Update notifications
+  trigger:
+    platform: state
+    entity_id: updater.updater
+  action:
+    service: notify.Home_Assistant_Telegram
+    data:
+      #message: 'Woohoo! Brooksy, there is a new Home Assistant release available.'
+      message: 'Woohoo! Brooksy, there is a new Home Assistant release available. Version {{states.group.system.updater.updater.state}}'
+      
+- alias: Conservatory temp trigger
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.consveratory_temperature
+    above: 27.10
+  action:
+    service: notify.Home_Assistant_Telegram
+    data:
+      message: 'Temp in conservatory is above trigger of 27.10°C at {{states.sensor.consveratory_temperature.state }} °C'
+
+- alias: Conservatory temp trigger
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.consveratory_temperature
+    above: 16.00
+    below: 27.10
+  action:
+    service: notify.Home_Assistant_Telegram
+    data:
+      message: 'Temp in conservatory is below  trigger of 27.10 degrees at {{states.sensor.consveratory_temperature.state }} degrees C'

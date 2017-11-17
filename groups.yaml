@@ -1,0 +1,160 @@
+## VIEWS ##
+default_view:
+  view: yes
+  icon: mdi:home
+  entities:
+    - group.living_room
+    - group.conservatory
+    - group.camera
+    - group.media
+    - group.nest
+    - group.mqtt_sensor1
+
+wx_view:
+  name: Weather
+  view: yes
+  #icon: mdi:google-circles-extended
+  icon: mdi:weather-partlycloudy
+  entities:
+    - group.device_location
+    - group.climate
+    - group.wxmap
+    - group.tides
+
+lights:
+  name: Lights
+  view: yes
+  icon: mdi:lightbulb
+  entities:
+    - group.living_room
+    - group.conservatory
+    - group.landing
+
+sensor_view:
+  name: Sensor
+  view: yes
+  icon: mdi:desktop-classic
+  entities:
+    - group.system
+    - group.pihole
+    - group.wol
+    - group.synology
+    - group.tinternet
+
+## GROUPS ##
+living_room:
+  name: Living Room Lights
+  entities: 
+    - light.uplighter_lw1
+    - light.lamp_lw2
+    - light.conservatory_lw4
+
+conservatory:
+    name: Conservatory Lights
+    entities:
+      - light.conservatory_lw4
+
+landing:
+    name: Upstairs Landing
+    entities:
+      - light.landing_lw3
+      - switch.smart_switch
+      
+media:
+  name: Media Players
+  entities:
+    - media_player.kitchen
+    - media_player.living_room
+    - media_player.living_room_2
+    - media_player.tv
+    - media_player.kodi
+
+nest:
+  name: Thermostat
+  entities:
+    - climate.hallway
+
+camera:
+  name: Camera
+  entities: 
+    - camera.front_drive
+    - camera.front_drive_2
+
+climate:
+  name: Weather
+  icon: mdi:weather-partlycloudy
+  entities:
+    - sun.sun
+    - sensor.dark_sky_temperature
+    - sensor.dark_sky_summary
+    - sensor.dark_sky_precip
+    - sensor.dark_sky_precip_probability
+    - sensor.dark_sky_precip_intensity
+    - sensor.dark_sky_wind_speed
+    - sensor.dark_sky_minutely_summary
+    - sensor.dark_sky_hourly_summary
+    - sensor.hallway_humidity
+
+tides:
+  name: Hastings Tides
+  entities: sensor.worldtidesinfo
+
+pihole:
+  name: PiHole
+  entities:
+    - sensor.pihole_ads_blocked_today
+    - sensor.pihole_ads_percentage_blocked_today
+    - sensor.pihole_dns_queries_today
+
+device_location:
+  name: Mobile Phones
+  view: no
+  entities:
+    - device_tracker.organzola_h1
+
+system:
+  name: System
+  view: no
+  entities:
+    - updater.updater
+    - sensor.cpu
+    - sensor.cpu_use
+    - sensor.ram_use
+    - sensor.ram_free
+    - sensor.disk_use_percent
+    - sensor.since_last_boot
+
+tinternet:
+  name: Internet Connection
+  view: no
+  entities:
+    - sensor.speedtest_ping
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+
+mqtt_sensor1:
+  name: MQTT Sensors
+  entities:
+    - sensor.consveratory_humidity
+    - sensor.consveratory_temperature
+
+wxmap:
+  name: Weather Map
+  entities:
+    - camera.uk
+    
+synology:
+  name: Synology DSM
+  entities:
+    - sensor.cpu_total_load
+    - sensor.memory_real_usage
+    - sensor.network_up
+    - sensor.network_down
+    - sensor.disk_smart_status
+    - sensor.volume_disk_temp_avg
+
+wol:
+  name: WOL
+  entities:
+    - switch.desktop
+ 

@@ -1,0 +1,21 @@
+
+    device_tracker.organzola_h1:
+      friendly_name: Jo
+    
+    device_tracker.dcpfrlcq_h1:
+      hidden: true
+        
+    light.lamp_lw2:
+      friendly_name: Lamp
+      
+    light.uplighter_lw1:
+      friendly_name: Uplighter
+    
+    light.landing_lw3:
+      friendly_name: Landing
+      
+    light.conservatory_lw4:
+      friendly_name: Conservatory
+    
+    sensor.consveratory_humidity:
+      icon: mdi:water-percent

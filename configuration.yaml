@@ -1,0 +1,232 @@
+##############################################################
+## General Configurations ##
+##############################################################
+
+homeassistant:
+  name: Home
+  latitude: !secret lat
+  longitude: !secret long
+  unit_system: metric
+  time_zone: Europe/London
+  customize: !include customize.yaml
+  elevation: 57
+
+
+http:
+  api_password: !secret http_password
+  
+  ip_ban_enabled: True
+  login_attempts_threshold: 5
+  trusted_networks:
+  - 192.168.0.0/24
+
+config:
+frontend:
+discovery:
+updater:
+logbook:
+history:
+sun:
+group: !include groups.yaml
+automation: !include automations.yaml
+
+logger:
+  default: warning
+  logs:
+    homeassistant.components.mqtt: warn
+
+ffmpeg:
+  ffmpeg_bin: /usr/bin/avconv
+
+emulated_hue:
+  #listen_port: 80
+
+#conversation:
+#script: !include scripts/restart_home_assistant.yaml
+
+##############################################################
+## Integrated Components ##
+##############################################################
+
+device_tracker:
+   - platform: owntracks
+     max_gps_accuracy: 200
+   - platform: nmap_tracker
+     hosts: 192.168.0.1-254
+     track_new_devices: yes
+     consider_home: 1200
+     home_interval: 10
+   - platform: sky_hub
+     host: 192.168.0.1
+   
+mqtt:
+  username: !secret mqtt_username
+  password: !secret mqtt_pwd
+  keepalive: 60
+
+zone:
+  name: Work
+  latitude: !secret work_lat
+  longitude: !secret work_long
+
+telegram_bot:
+  platform: polling
+  api_key: !secret telegram_api
+  allowed_chat_ids: !secret telegram_chat_id
+
+notify:
+  name: Home_Assistant_Telegram
+  platform: telegram
+  chat_id: !secret telegram_chat_id
+
+  
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+climate:
+  platform: nest
+  
+sensor:
+  - platform: darksky
+    api_key: !secret darksky_api
+    monitored_conditions:
+      - summary
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - wind_speed
+      - minutely_summary
+      - hourly_summary
+  - platform: nest
+    monitored_conditions:
+      - "humidity"
+
+#Everyday at 12:30AM, 6:30AM, 12:30PM, 6:30PM:  
+sensor 2:
+  platform: speedtest
+  minute: 30
+  hour:
+    - 0
+    - 6
+    - 12
+    - 18
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+sensor 3:
+  platform: cpuspeed
+  name: CPU 
+
+sensor 4:
+  platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /dev
+    - type: memory_free
+    - type: memory_use_percent
+    - type: processor_use
+    - type: since_last_boot
+
+sensor 5:
+  platform: mqtt
+  name: 'Consveratory Temperature'
+  state_topic: 'sensor/temperature'
+  qos: 0
+  unit_of_measurement: '°C'
+  force_update: true
+
+sensor 6:
+  platform: mqtt
+  name: 'Consveratory Humidity'
+  state_topic: 'sensor/humidity'
+  qos: 0
+  unit_of_measurement: '%'
+  force_update: true
+  
+sensor 7:
+  platform: pi_hole
+
+sensor 8:
+  - platform: synologydsm
+    host: 192.168.0.13
+    username: !secret synology_username
+    password: !secret synology_pwd
+    monitored_conditions:
+      - cpu_total_load
+      - memory_real_usage
+      - network_up
+
+sensor 9:
+  - platform: worldtidesinfo
+    api_key: !secret tides_api
+    latitude: 50.851
+    longitude: 0.558
+  
+ifttt:
+  key: !secret ifttt_key
+
+media_player:
+- platform: kodi
+  host: http://192.168.0.25
+  port: 8080
+  name: Kodi
+
+camera:
+  - platform: generic
+    still_image_url: http://192.168.0.101/picture/1/current/?_username=admin&_signature=7d695065c988780f42ecdc0e2f023aa2fda3c86e
+    name: Front Drive
+    scan_interval: 60
+  - platform: generic
+    still_image_url: http://192.168.0.101/picture/2/current/?_username=admin&_signature=52634d7b92e34c0b5c865eeb8e3d5935741934ad
+    name: Front Drive 2
+    scan_interval: 60
+
+influxdb:
+  host: 192.168.0.18
+  username: admin
+  password: admin
+
+camera 1:
+  platform: generic
+  #still_image_url: http://api.sat24.com/animated/GB/rainTMC/1/GMT%20Standard%20Time/1464363
+  still_image_url: https://api.sat24.com/animated/GB/rainTMC/1/GMT%20Standard%20Time/2958999
+  name: UK
+
+switch:
+  - platform: wake_on_lan
+    name: "desktop"
+    mac_address: "54:04:A6:94:E5:84"
+    host: "192.168.0.24"
+  - platform: tplink
+    name: "Smart Switch"
+    host: 192.168.0.23
+  - platform: broadlink
+    friendly_name: "Broadlink RM Pro"
+    host: 192.168.0.34
+    mac: "34:EA:34:B5:27:53"
+    type: rm2_pro_plus
+    switches:
+      tv:
+        friendly_name: "TV"
+        command_on: 'JgBgAAABK5EVEBQRFBAVEBUQFRAUERQQFTUUNRU1FTUUNRU1FBEUNRU1FBAVNRU1FBAVEBUQFBEUERQ1FRAUERQ1FTUUNRU1FAAFTwABKUgVAAxfAAEpSBUADF8AASlIFAANBQAAAAAAAAAA'
+        command_off: 'JgBgAAABK5EVEBQRFBAVEBUQFRAUERQQFTUUNRU1FTUUNRU1FBEUNRU1FBAVNRU1FBAVEBUQFBEUERQ1FRAUERQ1FTUUNRU1FAAFTwABKUgVAAxfAAEpSBUADF8AASlIFAANBQAAAAAAAAAA'
+      stereo:
+        friendly_name: "stereo"
+        command_on: 'JgB8AAABK5IUEhEUExEVNhQ2ETkVNhMSFBERFBQRFBERFRM2EjgVNhQRFBESFBMRFTYUNhE5FDcTNxE5FBERFBQRFBESFBMRFBIRFBQ2ETkUNxM3ETkUNhQ2EjgVAAL3AAEplBQADBoAASqTFAAMGgABKZQTAAwbAAEplBQADQUAAAAAAAAAAAAAAAA=='
+        command_off: 'JgB8AAABK5IUEhEUExEVNhQ2ETkVNhMSFBERFBQRFBERFRM2EjgVNhQRFBESFBMRFTYUNhE5FDcTNxE5FBERFBQRFBESFBMRFBIRFBQ2ETkUNxM3ETkUNhQ2EjgVAAL3AAEplBQADBoAASqTFAAMGgABKZQTAAwbAAEplBQADQUAAAAAAAAAAAAAAAA=='
+      movie:
+        friendly_name: "movie"
+        command_on: 'JgBsAAABKpMUERQRExIUNhM3FTYUNhMSFBEUERMTExEVERM2FTYUNhQSExEVERMSFDYUNhQ3EzYUNhU2FDYUNhU2ExIUERQRFBEUERQSExEVERM2FTYUNhQ2FTYTAAL4AAEqlBMADBoAASqTFAANBQAAAAAAAAAAAAAAAA=='
+      blanket:
+        friendly_name: "Jo's blanket"
+        command_on: 'sg0yAAcSEwYHEgcSBxIHEgcSEgYHEhMGBxISBgcSEwYHEhIGBxIHEhIGEgYHEgcSEwYTBge1AAAAAAAA'
+
+
+
+#################################
+#  Broadlink note: add double quotes (==) at the end of long strings, as seen for the stereo switch
+#################################
