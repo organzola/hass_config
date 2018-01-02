@@ -1,0 +1,17 @@
+- name: TV Mode
+  entities:
+    switch.movie: on
+    switch.tv: on
+    switch.amplifier: on
+
+- name: TV Mode Off
+  entities:
+    switch.movie: off
+    switch.tv: off
+    switch.amplifier: off
+
+- name: Goodnight
+  entities:
+    group.all_lights: off
+    switch.stair_lights: off
+    switch.moroccan_lights: off

@@ -9,6 +9,7 @@ default_view:
     - group.media
     - group.nest
     - group.mqtt_sensor1
+    - group.amplifier
 
 wx_view:
   name: Weather
@@ -29,6 +30,7 @@ lights:
     - group.living_room
     - group.conservatory
     - group.landing
+    - group.blankets
 
 sensor_view:
   name: Sensor
@@ -40,7 +42,8 @@ sensor_view:
     - group.wol
     - group.synology
     - group.tinternet
-
+    - group.house_radio
+    - group.tv_scene
 ## GROUPS ##
 living_room:
   name: Living Room Lights
@@ -48,6 +51,8 @@ living_room:
     - light.uplighter_lw1
     - light.lamp_lw2
     - light.conservatory_lw4
+    - switch.stair_lights
+    - switch.moroccan_lights
 
 conservatory:
     name: Conservatory Lights
@@ -66,8 +71,9 @@ media:
     - media_player.kitchen
     - media_player.living_room
     - media_player.living_room_2
-    - media_player.tv
+    - media_player.living_room_tv
     - media_player.kodi
+    - media_player.google_home
 
 nest:
   name: Thermostat
@@ -157,4 +163,28 @@ wol:
   name: WOL
   entities:
     - switch.desktop
- 
+
+blankets:
+  name: Blankets
+  entities:
+    - switch.jos_blanket
+    - switch.mels_blanket
+
+amplifier:
+  name: Amplifier
+  entities:
+    - switch.amplifier
+    - switch.movie
+
+house_radio:
+  name: House Radio
+  entities:
+  - input_select.radio_station
+  - input_select.chromecast_radio
+  - script.homeradio
+  - input_slider.volume_radio
+
+tv_scene:
+  name: TV Scene
+  entities:
+  - scene.tv_mode

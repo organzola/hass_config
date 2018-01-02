@@ -19,3 +19,10 @@
     
     sensor.consveratory_humidity:
       icon: mdi:water-percent
+    
+    group.all_automations:
+      hidden: false
+
+    script.homeradio:
+      friendly_name: Start Playing
+      icon: mdi:play

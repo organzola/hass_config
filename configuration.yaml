@@ -29,9 +29,15 @@ history:
 sun:
 group: !include groups.yaml
 automation: !include automations.yaml
+tts:
+  - platform: google
+    language: 'en-uk'
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
 
 logger:
-  default: warning
+  default: error
   logs:
     homeassistant.components.mqtt: warn
 
@@ -43,6 +49,9 @@ emulated_hue:
 
 #conversation:
 #script: !include scripts/restart_home_assistant.yaml
+
+script: !include scripts.yaml
+scene: !include scenes.yaml
 
 ##############################################################
 ## Integrated Components ##
@@ -163,8 +172,8 @@ sensor 8:
 sensor 9:
   - platform: worldtidesinfo
     api_key: !secret tides_api
-    latitude: 50.851
-    longitude: 0.558
+    latitude: !secret tides_lat
+    longitude: !secret tides_long
   
 ifttt:
   key: !secret ifttt_key
@@ -199,7 +208,7 @@ camera 1:
 switch:
   - platform: wake_on_lan
     name: "desktop"
-    mac_address: "54:04:A6:94:E5:84"
+    mac_address: !secret wol_mac
     host: "192.168.0.24"
   - platform: tplink
     name: "Smart Switch"
@@ -207,25 +216,77 @@ switch:
   - platform: broadlink
     friendly_name: "Broadlink RM Pro"
     host: 192.168.0.34
-    mac: "34:EA:34:B5:27:53"
+    mac: !secret rm_mac
     type: rm2_pro_plus
     switches:
       tv:
         friendly_name: "TV"
         command_on: 'JgBgAAABK5EVEBQRFBAVEBUQFRAUERQQFTUUNRU1FTUUNRU1FBEUNRU1FBAVNRU1FBAVEBUQFBEUERQ1FRAUERQ1FTUUNRU1FAAFTwABKUgVAAxfAAEpSBUADF8AASlIFAANBQAAAAAAAAAA'
         command_off: 'JgBgAAABK5EVEBQRFBAVEBUQFRAUERQQFTUUNRU1FTUUNRU1FBEUNRU1FBAVNRU1FBAVEBUQFBEUERQ1FRAUERQ1FTUUNRU1FAAFTwABKUgVAAxfAAEpSBUADF8AASlIFAANBQAAAAAAAAAA'
-      stereo:
-        friendly_name: "stereo"
+      amplifier:
+        friendly_name: "amplifier"
         command_on: 'JgB8AAABK5IUEhEUExEVNhQ2ETkVNhMSFBERFBQRFBERFRM2EjgVNhQRFBESFBMRFTYUNhE5FDcTNxE5FBERFBQRFBESFBMRFBIRFBQ2ETkUNxM3ETkUNhQ2EjgVAAL3AAEplBQADBoAASqTFAAMGgABKZQTAAwbAAEplBQADQUAAAAAAAAAAAAAAAA=='
         command_off: 'JgB8AAABK5IUEhEUExEVNhQ2ETkVNhMSFBERFBQRFBERFRM2EjgVNhQRFBESFBMRFTYUNhE5FDcTNxE5FBERFBQRFBESFBMRFBIRFBQ2ETkUNxM3ETkUNhQ2EjgVAAL3AAEplBQADBoAASqTFAAMGgABKZQTAAwbAAEplBQADQUAAAAAAAAAAAAAAAA=='
       movie:
         friendly_name: "movie"
         command_on: 'JgBsAAABKpMUERQRExIUNhM3FTYUNhMSFBEUERMTExEVERM2FTYUNhQSExEVERMSFDYUNhQ3EzYUNhU2FDYUNhU2ExIUERQRFBEUERQSExEVERM2FTYUNhQ2FTYTAAL4AAEqlBMADBoAASqTFAANBQAAAAAAAAAAAAAAAA=='
-      blanket:
+      blanket1:
         friendly_name: "Jo's blanket"
         command_on: 'sg0yAAcSEwYHEgcSBxIHEgcSEgYHEhMGBxISBgcSEwYHEhIGBxIHEhIGEgYHEgcSEwYTBge1AAAAAAAA'
+        command_off: 'slsyAAcREwYHEQcSBxEHEgcSEwYHEhMGBxITBgcSEwYHEhMGBxIHERMGEwYTBhMGBxIHEQe2AAAAAAAA'
+      blanket2:
+        friendly_name: "Mel's Blanket"
+        command_on: 'siwyAAgREwYIEQcRBxEIEQcRFAYHERMGBxETBggSEwYHEhMGEwYTBgcRBxIHEQcSEwYTBge2AAAAAAAA'
+        command_off: 'slUyAAgREwYHEQgRBxEHEQgREwYIERMFBxITBgcREwYHERMGEwYTBQgRCBEUBhMGBxEIEge2AAAAAAAA'
+      stair_light:
+        friendly_name: "Stair lights"
+        #command_on: 'sj4yAAcSEwYHEgcSBxIHEgcSEwYHEhMGBxITBgcSEwYTBhMGBxIHEgcSBxIHEgcSEwYTBge3AAAAAAAA'
+        command_on: 'shIyAAcSEwYHEgcSBxIHEQgSEwYHERMGBxITBggSEwYTBhMGBxIHEgcSBxIHEQcREwYTBge3AAAAAAAA'
+        command_off: 'sjMyAAgREwYHEQgRBxEIEQgREwYHEhMFBxEUBggREwYTBhMFBxEIEQgRCBEUBRMGBxEIEQe2AAAAAAAA'
+      moroccan_light:
+        friendly_name: "Moroccan lights"
+        command_on: 'siUyAAgREwYHEgcSBxEIEQcREwYHEhMGBxETBhMGEwYHERMGBxEIEQgRBxEIEQgREwYTBge3AAAAAAAA'
+        command_off: 'sjwyAAcSEwYHEgcSBxIHEgcSEwYHEhMGBxITBhMGEwYHEhMGBxIHEgcSBxITBhMGBxIHEge3AAAAAAAA'
 
 
+
+input_select:
+  radio_station:
+    name: 'Select Radio Station:'
+    options:
+      - Radio 538
+      - Q-Music
+      - 3FM
+      - 100% NL
+      - Veronica
+      - Sky Radio
+      - Arrow Classic Rock
+      - Classic FM
+      - BNR Nieuwsradio
+      - SLAM! Hardstyle
+      - Sleep Radio
+      - Ambient Sleeping Pill
+      - Radio Art - Sleep
+      - Ambi Nature Radio
+      - Calm Radio - Sleep
+      - Dinamo.FM Sleep
+
+  chromecast_radio:
+    name: 'Select Speakers:'
+    options:
+      - Kitchen
+      - Living Room
+      - Downstairs
+    initial: Kitchen
+    icon: mdi:speaker-wireless
+
+# input_slider: 
+  # volume_radio:
+    # name: volume
+    # icon: mdi:volume-high
+    # min: 0
+    # max: 1
+    # step: 0.05
 
 #################################
 #  Broadlink note: add double quotes (==) at the end of long strings, as seen for the stereo switch
