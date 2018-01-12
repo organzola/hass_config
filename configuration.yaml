@@ -69,9 +69,9 @@ device_tracker:
      host: 192.168.0.1
    
 mqtt:
-  username: !secret mqtt_username
-  password: !secret mqtt_pwd
-  keepalive: 60
+  #username: !secret mqtt_username
+  #password: !secret mqtt_pwd
+  #keepalive: 60
 
 zone:
   name: Work
@@ -174,7 +174,101 @@ sensor 9:
     api_key: !secret tides_api
     latitude: !secret tides_lat
     longitude: !secret tides_long
+
+sensor 10:
+  - platform: mqtt  
+    state_topic: "bruh/sensornode1"  
+    name: "SN1 Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
   
+  - platform: mqtt  
+    state_topic: "bruh/sensornode1"  
+    name: "SN1 LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode1"  
+    name: "SN1 PIR"  
+    value_template: '{{ value_json.motion }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode1"  
+    name: "SN1 Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'  
+
+  - platform: mqtt
+    state_topic: "bruh/sensornode1"
+    name: "SN1 Real Feel"
+    unit_of_measurement: "°F"
+    value_template: '{{ value_json.heatIndex | round(1) }}'
+
+sensor 11:
+  - platform: mqtt  
+    state_topic: "bruh/sensornode2"  
+    name: "SN2 Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode2"  
+    name: "SN2 LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode2"  
+    name: "SN2 PIR"  
+    value_template: '{{ value_json.motion }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode2"  
+    name: "SN2 Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'  
+
+  - platform: mqtt
+    state_topic: "bruh/sensornode2"
+    name: "SN2 Real Feel"
+    unit_of_measurement: "°F"
+    value_template: '{{ value_json.heatIndex | round(1) }}'
+
+
+sensor 12:
+  - platform: mqtt  
+    state_topic: "bruh/sensornode3"  
+    name: "SN3 Humidity"  
+    unit_of_measurement: "%"  
+    value_template: '{{ value_json.humidity | round(1) }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode3"  
+    name: "SN3 LDR"
+    ##This sensor is not calibrated to actual LUX. Rather, this a map of the input voltage ranging from 0 - 1023.
+    unit_of_measurement: "LUX"  
+    value_template: '{{ value_json.ldr }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode3"  
+    name: "SN3 PIR"  
+    value_template: '{{ value_json.motion }}'  
+  
+  - platform: mqtt  
+    state_topic: "bruh/sensornode3"  
+    name: "SN3 Temperature"  
+    unit_of_measurement: "°F"  
+    value_template: '{{ value_json.temperature | round(1) }}'  
+
+  - platform: mqtt
+    state_topic: "bruh/sensornode3"
+    name: "SN3 Real Feel"
+    unit_of_measurement: "°F"
+    value_template: '{{ value_json.heatIndex | round(1) }}'
+
 ifttt:
   key: !secret ifttt_key
 
@@ -195,9 +289,9 @@ camera:
     scan_interval: 60
 
 influxdb:
-  host: 192.168.0.18
-  username: admin
-  password: admin
+  host: 192.168.0.200
+  #username: admin
+  #password: admin
 
 camera 1:
   platform: generic

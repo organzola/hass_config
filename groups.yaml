@@ -10,6 +10,7 @@ default_view:
     - group.nest
     - group.mqtt_sensor1
     - group.amplifier
+    - group.decorative
 
 wx_view:
   name: Weather
@@ -37,6 +38,9 @@ sensor_view:
   view: yes
   icon: mdi:desktop-classic
   entities:
+    - group.sensor_node_1_card
+    - group.sensor_node_2_card
+    - group.sensor_node_3_card
     - group.system
     - group.pihole
     - group.wol
@@ -51,6 +55,12 @@ living_room:
     - light.uplighter_lw1
     - light.lamp_lw2
     - light.conservatory_lw4
+    - switch.stair_lights
+    - switch.moroccan_lights
+
+decorative:
+  name: Decorative Lights
+  entities: 
     - switch.stair_lights
     - switch.moroccan_lights
 
@@ -188,3 +198,32 @@ tv_scene:
   name: TV Scene
   entities:
   - scene.tv_mode
+
+sensor_node_1_card:
+  name: Sensor Node 1
+  entities:
+  - sensor.sn1_temperature
+  - sensor.sn1_humidity
+  - sensor.sn1_ldr
+  - sensor.sn1_pir  
+  - light.sn1_led
+
+
+sensor_node_2_card:
+  name: Conservatory Sensor Node
+  entities:
+  - sensor.sn2_temperature
+  - sensor.sn2_humidity
+  - sensor.sn2_ldr
+  - sensor.sn2_pir  
+  - light.sn2_led
+
+
+sensor_node_3_card:
+  name: Loft Sensor Node
+  entities:
+  - sensor.sn3_temperature
+  - sensor.sn3_humidity
+  - sensor.sn3_ldr
+  - sensor.sn3_pir  
+  - light.sn3_led
